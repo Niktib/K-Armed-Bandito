@@ -1,0 +1,9 @@
+To Do list:
+Write Test beds (Individually)
+
+UCB Algorithm
+
+Generic Update Algorithm (after pulling arm but before next UCB check)
+
+
+

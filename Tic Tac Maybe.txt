@@ -1,0 +1,28 @@
+stupid opponent code:
+randomNumGen RNG is a number between 1-99.
+If 1-33, put it on same row (if available)
+If 34-66, put it on same column (if available)
+If 67-99, put it on same diagonal (if available)
+next count how many options are available, and either RNG a 50/50 or place in remaining spot.
+
+
+Tic tac toe is a two dimensional array, 3x3.
+Win condition is three of one symbol in a row, draw is when all spots are full.
+
+
+Tie all RNG to the computers time.
+
+
+BanditMaker(int K)
+	On initialization creates a list of BanditArm objects equal to K.
+	Returns list of k size with each BanditArm
+
+	
+
+List of BanditArm objects
+
+Each BanditArm object when created, uses RNG to populate its rewards and probabilities
+	On initialization it generates reward + probability
+	Has method, Pull, which uses RNG to find out if a reward is earned
+	Has method OptimalReward and OptimalProbability, to give the information about both these characteriztics back to the user.
+	
