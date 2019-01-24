@@ -2,6 +2,6 @@ import random
 from datetime import datetime
 
 class RandomNumGen:
-	def RandomNumberGen():
+	def RandomGen():
 		random.seed(datetime.now())
 		return random.random()

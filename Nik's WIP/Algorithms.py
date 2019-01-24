@@ -1,13 +1,5 @@
 import math
 
-class UCB:
-	def __init__(self, c=2):
-		self.c = c
-		
-	def updateReward(self, totalTimes, num, reward, previousValue):
-		updatedValue = previousValue + self.c * math.sqrt(math.log10(totalTimes)/num)
-		return updatedValue
-		
 class lrp:
 	def __init__(self, alpha=0.01, beta=0.01):
 		self.alpha = alpha 
