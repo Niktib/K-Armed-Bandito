@@ -1,9 +1,10 @@
 import RandomNumberGenerator as RNG
 class BanditArm:
-	def __init__(self):
-		self.prob = RNG.RandomNumGen.RandomGen()
+	def __init__(self, Randomizer):
+		self.Randomizer = Randomizer
+		self.prob = self.Randomizer.RandomGen()
 	def Pull(self):
-		CurrentPull = RNG.RandomNumGen.RandomGen()
+		CurrentPull = self.Randomizer.RandomGen()
 		if (CurrentPull < self.prob):
 			return 1
 		else:
