@@ -1,0 +1,2 @@
+Iteration #, Run #, Times optimal action picked, Average reward 
+
