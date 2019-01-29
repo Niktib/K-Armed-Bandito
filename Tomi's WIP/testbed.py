@@ -59,8 +59,8 @@ class SBA:   # Simple Bandit Algorithm
 	def StartPullingArms(self):
 		print("Start Pulling Arms".format())
 		self.Optimal = self.OptimalArm()
-		ArmPicked = self.Policy.action(self.BanditArmsArr,self.ProbArr,self.iteration)
-		ArmPicked = self.RandomPickOfArms()
+		ArmPicked = self.Policy.action(self)
+		#ArmPicked = self.RandomPickOfArms()
 		Result = self.BanditArmsArr[ArmPicked].Pull(random.random())
 		self.RewardsArr[ArmPicked] = self.RewardsArr[ArmPicked] + Result
 		print("Awards Array: {}".format(self.RewardsArr)) #debug
@@ -70,7 +70,10 @@ class SBA:   # Simple Bandit Algorithm
 		#print("{} Arms \nRun Number: {}".format(self.arms, self.runNum))
 		self.ArmPickedThisRound = ArmPicked
 		self.iteration += 1
-
+		'''
+		for i in range(len(self.ProbArr)):
+			self.ProbArr[i] = self.Policy.updateQ(self,i)
+		'''
 
 	def OptimalArm(self):
 		i = 0
@@ -111,11 +114,20 @@ class SBA:   # Simple Bandit Algorithm
 			total = total + self.RewardsArr[index]
 		return total/self.arms
 
+	def AverageRewardArm(self, index):
+		print("Average Reward Arm") #debug
+		if self.BanditArmsArr[index].timesPulled > 0:
+			return self.BanditArmsArr[index].GoodPull / self.BanditArmsArr[index].timesPulled
+		else:
+			return 0
+
 	def printArmData(self): #debug mainly
 		for i in range(len(self.BanditArmsArr)):
 			arm = self.BanditArmsArr[i]
 			self.outFile.write("Arm Index: {}, Arm Probability: {}, TimesPicked: {}, GoodPulls: {} \n".format(i,arm.prob, arm.timesPulled, arm.GoodPull))
 		self.outFile.write("Probability Array: {} \nRewardsArray: {}\n".format(self.ProbArr, self.RewardsArr))
+
+
 #print(os.path.dirname(os.path.realpath(__file__)))
 test = TestBed(10)
-test.runIterations(5,2)
+test.runIterations(5000, 2)
