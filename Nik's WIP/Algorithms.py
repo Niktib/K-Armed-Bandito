@@ -1,29 +1,41 @@
 import math
+import random
 
 class UCB:
-	def __init__(self, c=2):
+	def __init__(self, c=0.01):
 		self.c = c
-	#The below algorithm accepts various
-	def Picker(self, TotalRunTime, PickedArr, ProbArr):
-		GreatestAction = 0
-		ActionToPick = 0
-		for index in range(len(PickedArr)):
-			CurrentAction = ProbArr[index] + self.c * math.sqrt(math.log10(TotalRunTime)/PickedArr[index])
-			if (CurrentAction > GreatestAction):
-				ActionToPick = index
-		return ActionToPick
+	def action(self, TestBed):
+		actionArry = [None] * len(TestBed.BanditArmsArr)
+		for i in range(len(TestBed.BanditArmsArr)):
+			if TestBed.BanditArmsArr[i].timesPulled > 0:
+				actionArry[i] = TestBed.AverageRewardArm(i) + self.c * math.sqrt( (math.log(TestBed.iteration)) / TestBed.BanditArmsArr[i].timesPulled )
+			else:
+				actionArry[i] = 1
+				action = actionArry.index(max(actionArry))
+		
+		return action
 
-class SimpleUpdate:
-	def Update(self, timesPicked, Reward, CurrentProbability):
-		UpdatedValue = CurrentProbability + (1/timesPicked) * (Reward - CurrentProbability)
-		return UpdatedValue
+	def updateQ(self, TestBed, index):
+		return TestBed.ProbArr[index] + (1/TestBed.iteration) * (TestBed.AverageRewardArm(index) - TestBed.ProbArr[index])
 	
 class lrp:
 	def __init__(self, alpha=0.01, beta=0.01):
 		self.alpha = alpha 
 		self.beta = beta
-		
-	def updatingArray(self, arr, i, success):
+	
+	#This function just figures out which arm correlates with which randomly generated number 
+	def action(self, testbed):
+		WhichArm = random.random()
+		i = 0
+		for index in range(len(testbed.ProbArr)):
+			i = i + testbed.ProbArr[index]
+			if (WhichArm < i):
+				return index 
+
+	def updatingArray(self, testbed):
+		success = testbed.Result
+		i = testbed.ArmPicked
+		arr = testbed.ProbArr
 		for index in range(len(arr)):
 			if (index == i ):
 				if (success == 1):
@@ -41,7 +53,19 @@ class lri:
 	def __init__(self, alpha=0.01):
 		self.alpha = alpha 
 		
-	def updatingArray(self, arr, i, success):
+	#This function just figures out which arm correlates with which randomly generated number 
+	def action(self, testbed):
+		WhichArm = random.random()
+		i = 0
+		for index in range(len(testbed.ProbArr)):
+			i = i + testbed.ProbArr[index]
+			if (WhichArm < i):
+				return index 
+				
+	def updatingArray(self, testbed):
+		success = testbed.Result
+		i = testbed.ArmPicked
+		arr = testbed.ProbArr
 		if (success == 0): return arr
 		for index in range(len(arr)):
 			if (index == i ):
