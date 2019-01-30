@@ -7,11 +7,11 @@ class UCB:
 	def action(self, TestBed):
 		actionArry = [None] * len(TestBed.BanditArmsArr)
 		for i in range(len(TestBed.BanditArmsArr)):
-			if TestBed.BanditArmsArr[i].timesPulled > 0:
-				actionArry[i] = TestBed.AverageRewardArm(i) + self.c * math.sqrt( (math.log(TestBed.iteration)) / TestBed.BanditArmsArr[i].timesPulled )
+			if (TestBed.BanditArmsArr[i].timesPulled > 0):
+				actionArry[i] = TestBed.BanditArmsArr[i].Average() + self.c * math.sqrt( (math.log(TestBed.iteration)) / TestBed.BanditArmsArr[i].timesPulled )
 			else:
 				actionArry[i] = 1
-				action = actionArry.index(max(actionArry))
+		action = actionArry.index(max(actionArry))
 		
 		return action
 
