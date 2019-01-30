@@ -8,11 +8,11 @@ from datetime import datetime
 class TestBed:
 	def __init__(self, numOfArms, name):
 		self.k = numOfArms   # number of arms
-		self.name = name
+		self.name = "{} Arms".format(self.k) + name
 
 	def runIterations(self, numOfRuns, numberOfIteration,createGraph=True):
 		self.n = numOfRuns  # number of runs
-		f = open("TestData.txt", "w")
+		f = open("TestData{}.txt".format(self.name), "w")
 		f.write("Iteration #, Run #, Times optimal action picked, Average reward \n")
 		UCBPolciy = UCBalgo.UCB()
 		for iteration in range(1, numberOfIteration+1):
@@ -140,5 +140,5 @@ class SBA:   # Simple Bandit Algorithm
 
 
 #print(os.path.dirname(os.path.realpath(__file__)))
-test = TestBed(10, "10 Arms UCB")
-test.runIterations(5000, 2)
+test = TestBed(10, "UCB")
+test.runIterations(5000, 100)
