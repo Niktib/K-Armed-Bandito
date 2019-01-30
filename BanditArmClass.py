@@ -15,6 +15,10 @@ class BanditArm:
 			return 1
 		else:
 			return 0
+			
+	def Average(self):
+		return self.GoodPull /self.timesPulled
+		
 	#Stats returns the arms probability, this way we can check which has the highest probability or can compare and contrast information.
 	def stats(self):
 		return self.prob

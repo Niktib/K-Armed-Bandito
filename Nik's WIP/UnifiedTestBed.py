@@ -66,12 +66,16 @@ class Gambler:
 	def StartPullingArms(self, l):
 		#The below object should be changeable depending on if we are doing UCB, Greedy, LRP or LRI
 		PlottingList = []
-		self.iteration = 0
+		self.iteration = 1
 		for index in range(l):
 			if (index % 100 == 0): 
 				self.LogResults(index)
+			if (self.WhichAlgorithm == 1):
+				PlottingList.append(self.AverageRewardIteration())
+			elif (self.WhichAlgorithm > 1):
 				PlottingList.append(self.ProbArr[self.Optimal])
-			self.iteration = index
+				
+			self.iteration = index + 1
 			self.ArmPicked = self.Policy.action(self)
 			self.Result = self.BanditArmsArr[self.ArmPicked].Pull(random.random())
 			#If LRI or LRP it will update the probability arrays
@@ -91,7 +95,13 @@ class Gambler:
 		return k
 						
 	def LogResults(self, index):
-		self.outfile.write(str(self.n) + "," + str(index) + "," + str(self.Optimal) + "," + str(self.AverageReward()) + "," + str(self.BanditArmsArr[self.Optimal].timesPulled) + "," + str(self.ProbArr[self.Optimal]) + "\n")
+		self.outfile.write(str(self.n) + "," + str(index) + "," + str(self.Optimal) + "," + str(self.AverageReward()) + "," + str(self.BanditArmsArr[self.Optimal].timesPulled) + "," + str(self.ProbArr[self.Optimal]) + "," + str(self.BanditArmsArr[self.Optimal].prob) + "\n")
+	
+	def AverageRewardIteration(self):
+		total = 0
+		for index in range(len(self.BanditArmsArr)):
+			total = total + self.BanditArmsArr[index].GoodPull
+		return total/self.iteration
 		
 	def AverageReward(self):
 		total = 0
