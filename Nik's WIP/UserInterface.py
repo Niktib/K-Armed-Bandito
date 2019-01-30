@@ -11,7 +11,7 @@ Algorithm = input(":")
 test = UTB.TestBed(int(n), int(k), int(l), int(Algorithm))
 '''
 
-#test = UTB.TestBed(20, 10, 5000, 1)
-test = UTB.TestBed(20, 10, 5000, 2)
-test = UTB.TestBed(20, 10, 5000, 3)
+test = UTB.TestBed(100, 10, 5000, 1)
+test = UTB.TestBed(100, 10, 5000, 2)
+test = UTB.TestBed(100, 10, 5000, 3)
 print("\nAll done, the test file and graphs should be in your folder\n")
