@@ -1,30 +1,34 @@
 import BanditArmClass as BAC
 import UCBalgo
 import random
+import plotReward
 from datetime import datetime
 
 
 class TestBed:
-	def __init__(self, numOfArms):
+	def __init__(self, numOfArms, name):
 		self.k = numOfArms   # number of arms
+		self.name = name
 
-	def runIterations(self, numOfRuns, numberOfIteration):
+	def runIterations(self, numOfRuns, numberOfIteration,createGraph=True):
 		self.n = numOfRuns  # number of runs
 		f = open("TestData.txt", "w")
 		f.write("Iteration #, Run #, Times optimal action picked, Average reward \n")
 		UCBPolciy = UCBalgo.UCB()
 		for iteration in range(1, numberOfIteration+1):
-			SBArun = SBA(10, f, UCBPolciy)
+			graphMaker = plotReward.plotReward("{}, iter {}".format(self.name,iteration))
+			SBArun = SBA(self.k, f, UCBPolciy)
 			f.write("\n")
 			for index in range(1, self.n+1):
 				print("Iteration: {}, Run: {}".format(iteration, index))  # debug
 				SBArun.StartPullingArms()
 				SBArun.LogResults(index, iteration)
+				graphMaker.LogResults(SBArun.AverageRewardIteration())
 				if (index % 100 == 0):
 					print("Index: {}, index % 100: {}".format(index, index % 100))
 					SBArun.LogResults100(index, iteration)
 			SBArun.printArmData()  # debug
-
+			graphMaker.plot()
 		f.close()
 
 
@@ -114,6 +118,13 @@ class SBA:   # Simple Bandit Algorithm
 			total = total + self.RewardsArr[index]
 		return total/self.arms
 
+	def AverageRewardIteration(self):
+		print("Average Reward") #debug
+		total = 0
+		for index in range(len(self.RewardsArr)):
+			total = total + self.RewardsArr[index]
+		return total/self.iteration
+
 	def AverageRewardArm(self, index):
 		print("Average Reward Arm") #debug
 		if self.BanditArmsArr[index].timesPulled > 0:
@@ -129,5 +140,5 @@ class SBA:   # Simple Bandit Algorithm
 
 
 #print(os.path.dirname(os.path.realpath(__file__)))
-test = TestBed(10)
+test = TestBed(10, "10 Arms UCB")
 test.runIterations(5000, 2)

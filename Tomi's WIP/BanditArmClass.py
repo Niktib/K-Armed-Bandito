@@ -3,6 +3,7 @@ class BanditArm:
 		self.prob = Randomizer
 		self.timesPulled = 0
 		self.GoodPull = 0
+
 	def Pull(self, pullProb):
 		CurrentPull = pullProb
 		self.timesPulled += 1
@@ -11,5 +12,6 @@ class BanditArm:
 			return 1
 		else:
 			return 0
+
 	def stats(self):
 		return self.prob, self.timesPulled
