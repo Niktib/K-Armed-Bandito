@@ -70,10 +70,12 @@ class Gambler:
 		for index in range(l):
 			if (index % 100 == 0): 
 				self.LogResults(index)
-			if (self.WhichAlgorithm == 1):
-				PlottingList.append(self.AverageRewardIteration())
-			elif (self.WhichAlgorithm > 1):
-				PlottingList.append(self.ProbArr[self.Optimal])
+			
+			if (index % 10 == 0): 
+				if (self.WhichAlgorithm == 1):
+					PlottingList.append(self.AverageRewardIteration())
+				elif (self.WhichAlgorithm > 1):
+					PlottingList.append(self.ProbArr[self.Optimal])
 				
 			self.iteration = index + 1
 			self.ArmPicked = self.Policy.action(self)
