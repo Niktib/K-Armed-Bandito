@@ -2,21 +2,29 @@ import BanditArmClass as BAC
 import random
 from datetime import datetime
 import Algorithms as AG 
+import plotReward
 import os
 
 class TestBed:
-	def __init__(self, n, k, l, WhichAlgorithm):
+	def __init__(self, n=100, k=10, l=5000, WhichAlgorithm=1):
 		#WhichAlgorithm will be a number between 1 and 3 to clarify which style of algorithm will be applied to the running of the Gambler.
 		#1 is UCB, 2 is Learning Reward-Inaction, 3 is Learning Reward-Penalty
 		#n is number of runs
 		#k is number of arms
 		#l is Number of times the arms should be pulled
-		f = open(os.path.dirname(os.path.realpath(__file__)) + "\TestData.txt","w")
+		if (WhichAlgorithm == 1): AlgorithmName = "UCB"
+		elif (WhichAlgorithm == 2): AlgorithmName = "LRI"
+		elif (WhichAlgorithm == 3): AlgorithmName = "LRP"
+		graphMaker = plotReward.plotReward("test")
+		f = open(os.path.dirname(os.path.realpath(__file__)) + "\TestData{}.txt".format(AlgorithmName),"w")
 		f.write("Gambler #,Round #,OptimalArm,Average reward, Times optimal action picked,Probability of Picking Optimal\n")
 		for index in range(n):
 			GamblerObject = Gambler(k, f, index, WhichAlgorithm)
-			GamblerObject.StartPullingArms(l)
-			
+			test =(GamblerObject.StartPullingArms(l))
+			graphMaker.LogProb(test)
+		
+		
+		graphMaker.plotProb(WhichAlgorithm)
 		f.close()
 
 class Gambler:
@@ -28,7 +36,7 @@ class Gambler:
 		random.seed(datetime.now())
 		self.BanditArmsArr = []
 		self.ProbArr = []			#stores the probabilities of picking each arm cumulatively
-		self.WhichAlgorithm = WhichAlgorithm
+		self.WhichAlgorithm = WhichAlgorithm		
 		
 		#The below for loop fills in all the defaults
 		#0's for all the counters of rewards and times picked and a probability divided equally amongst all arms for the Value 
@@ -57,9 +65,13 @@ class Gambler:
 	#It records the results in the arrays
 	def StartPullingArms(self, l):
 		#The below object should be changeable depending on if we are doing UCB, Greedy, LRP or LRI
+		PlottingList = []
+		self.iteration = 0
 		for index in range(l):
 			if (index % 100 == 0): 
 				self.LogResults(index)
+				PlottingList.append(self.ProbArr[self.Optimal])
+			self.iteration = index
 			self.ArmPicked = self.Policy.action(self)
 			self.Result = self.BanditArmsArr[self.ArmPicked].Pull(random.random())
 			#If LRI or LRP it will update the probability arrays
@@ -67,6 +79,7 @@ class Gambler:
 				self.ProbArr = self.Policy.updatingArray(self)
 				
 		self.LogResults(l)
+		return PlottingList
 
 	def OptimalArm(self):
 		i = 0
@@ -85,6 +98,4 @@ class Gambler:
 		for index in range(len(self.BanditArmsArr)):
 			total = total + self.BanditArmsArr[index].GoodPull
 		return total/self.k
-		
 
-test = TestBed(100, 10, 5000, 2)
