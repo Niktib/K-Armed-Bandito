@@ -6,7 +6,7 @@ class UCB:
         print("UCB Init")  # debug
         pass
 
-    def action(self, TestBed, c=0.01):
+    def action(self, TestBed, c=0.9):
         actionArry = [None] * len(TestBed.BanditArmsArr)
         for i in range(len(TestBed.BanditArmsArr)):
             if TestBed.BanditArmsArr[i].timesPulled > 0:
