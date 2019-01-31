@@ -1,3 +1,6 @@
+# Name, Student Number
+# Nikolas Maier, 500461990
+# Oluwatomilayo Adegbite, 500569283
 class BanditArm:
 	#When a bandit arm initializes it creates its own copy of the RNG object
 	#It then generates it's unique probability for pulling the arm and generating a success

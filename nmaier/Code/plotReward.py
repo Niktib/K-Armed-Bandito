@@ -1,3 +1,6 @@
+# Name, Student Number
+# Nikolas Maier, 500461990
+# Oluwatomilayo Adegbite, 500569283
 import matplotlib.pyplot as plt
 
 class plotReward:
@@ -23,7 +26,17 @@ class plotReward:
 		self.ProbGraph.grid(True)
 		self.ProbGraph.savefig('GraphOf{}.png'.format(self.name))
 		self.ProbGraph.clf() #clear the current graph, can be removed to see all values on one chart
-
+		
+	def plotUCB(self):
+		self.name = "UCB"
+		#plt.plot(self.logList,label='Chance of Picking Optimal Arm')
+		self.ProbGraph.xlabel('Steps')
+		self.ProbGraph.ylabel('Average Reward')
+		self.ProbGraph.title('Average Reward over 20 Runs')
+		self.ProbGraph.grid(True)
+		self.ProbGraph.savefig('GraphOf{}.png'.format(self.name))
+		self.ProbGraph.clf() #clear the current graph, can be removed to see all values on one chart
+		
 	def plot(self):
 		plt.plot(self.logList,label=self.name)
 		plt.xlabel('Steps')
